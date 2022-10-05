@@ -128,7 +128,6 @@ export const sendTransaction = async (...props) => {
   const logs = await captureLogs(async () => {
     try {
       const extractor = extractParameters("tx")
-
       const {code, args, signers, limit} = await extractor(_props)
 
       const serviceAuth = authorization()

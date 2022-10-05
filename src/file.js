@@ -88,7 +88,7 @@ export const getPath = async (name, type = TRANSACTION) => {
  * @param {boolean} [byAddress=false] - flag to indicate if address map is address to address type.
  * @returns {string}
  */
-export const getTemplate = async (file, addressMap = {}, byAddress = false) => {
+export const getTemplate = (file, addressMap = {}, byAddress = false) => {
   const rawCode = readFile(file)
 
   const defaults = byAddress ? defaultsByAddress : defaultsByName

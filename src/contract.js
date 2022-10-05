@@ -42,7 +42,6 @@ export const getContractAddress = async (name, useDefaults = false) => {
   const addressMap = {FlowManager: managerAddress}
 
   const code = await registry.scripts.getContractAddressTemplate(addressMap)
-
   const args = [name, managerAddress]
   const [contractAddress] = await executeScript({
     code,
