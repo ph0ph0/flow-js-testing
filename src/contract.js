@@ -30,7 +30,6 @@ import registry from "./generated"
  */
 export const getContractAddress = async (name, useDefaults = false) => {
   // TODO: Maybe try to automatically deploy contract? 🤔
-  console.log(`Running get contract address!`)
 
   if (useDefaults) {
     const defaultContract = defaultsByName[name]
@@ -42,13 +41,8 @@ export const getContractAddress = async (name, useDefaults = false) => {
   const managerAddress = await getManagerAddress()
   const addressMap = {FlowManager: managerAddress}
 
-  console.log(
-    `managerAddress in getContractAddress: ${JSON.stringify(managerAddress)}`
-  )
-
   const code = await registry.scripts.getContractAddressTemplate(addressMap)
 
-  console.log(`code in getCA: ${JSON.stringify(code)}`)
   const args = [name, managerAddress]
   const [contractAddress] = await executeScript({
     code,
@@ -56,21 +50,11 @@ export const getContractAddress = async (name, useDefaults = false) => {
     service: true,
   })
 
-  console.log(
-    `contract address retrieved for name ${name} is: ${contractAddress}`
-  )
-
-  console.log(`^^^^^^^^^^^^^^^^^^^^^^Running my script`)
-
   const res = await executeScript({
     printAccountsScript,
     args,
     service: true,
   })
-
-  console.log(`%$%$%$%%$%$%$%$%$%$%$%%$%$%$%$%%$%$res: ${JSON.stringify(res)}`)
-
-  // contractAddress is null here
 
   return contractAddress
 }

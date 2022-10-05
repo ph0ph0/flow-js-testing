@@ -34,7 +34,6 @@ export const extractParameters = ixType => {
 
     if (isObject(params[0])) {
       const [props] = params
-      console.log("props in eP: ", JSON.stringify(props))
       const {
         name,
         code,
@@ -74,7 +73,6 @@ export const extractParameters = ixType => {
       const getIxTemplate =
         ixType === "script" ? getScriptCode : getTransactionCode
       ixCode = await getIxTemplate({name: ixName})
-      console.log(`ixCode after calling getCode: ${ixCode}`)
     }
 
     // We need a way around to allow initial scripts and transactions for Manager contract
@@ -93,9 +91,6 @@ export const extractParameters = ixType => {
       ...deployedContracts,
       FlowManager: serviceAddress,
     }
-
-    // esTFNFT is not set here yet..
-    console.log(`addressMap in iX: ${JSON.stringify(addressMap)}`)
 
     // Replace code import addresses
     ixCode = replaceImportAddresses(ixCode, addressMap)
@@ -137,8 +132,6 @@ export const sendTransaction = async (...props) => {
 
       const {code, args, signers, limit} = await extractor(_props)
 
-      console.log("Code after extraction in sendTx: ", code)
-
       const serviceAuth = authorization()
 
       // set repeating transaction code
@@ -162,14 +155,9 @@ export const sendTransaction = async (...props) => {
       if (args) {
         const resolvedArgs = await resolveArguments(args, code)
         ix.push(fcl.args(resolvedArgs))
-        console.log(
-          `resolved arguments in sendTx: ${JSON.stringify(resolvedArgs)}`
-        )
       }
-      console.log(`constructed tx: ${JSON.stringify(ix)}`)
       const response = await fcl.send(ix)
       result = await fcl.tx(response).onceExecuted()
-      console.log(`tx result: ${JSON.stringify(result)}`)
     } catch (e) {
       err = e
     }
@@ -186,20 +174,13 @@ export const sendTransaction = async (...props) => {
  * @returns {Promise<*>}
  */
 export const executeScript = async (...props) => {
-  console.log(`Executing script...`)
   let result = null,
     err = null
   const logs = await captureLogs(async () => {
-    console.log(`running captureLogs...`)
     try {
-      console.log(`About to run extract parameters...`)
       const extractor = extractParameters("script")
       console.log(`About to run extractor with props: ${JSON.stringify(props)}`)
       const {code, args, limit} = await extractor(props)
-
-      console.log(`extractor code: ${JSON.stringify(code)}`)
-      console.log(`extractor args: ${JSON.stringify(args)}`)
-      console.log(`extractor limit: ${JSON.stringify(limit)}`)
 
       const ix = [fcl.script(code), fcl.limit(limit)]
       // add arguments if any
@@ -208,9 +189,7 @@ export const executeScript = async (...props) => {
         ix.push(fcl.args(resolvedArgs))
       }
       const response = await fcl.send(ix)
-      console.log(`script response: ${JSON.stringify(response)}`)
       result = await fcl.decode(response)
-      console.log(`script result: ${JSON.stringify(result)}`)
     } catch (e) {
       err = e
     }
