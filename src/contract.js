@@ -50,34 +50,5 @@ export const getContractAddress = async (name, useDefaults = false) => {
     service: true,
   })
 
-  const res = await executeScript({
-    printAccountsScript,
-    args,
-    service: true,
-  })
-
   return contractAddress
-}
-
-let printAccountsScript = `
-  import FlowManager from 0x01
-
-pub fun main(managerAccount: Address): {String: Address} {
-    let manager = getAccount(managerAccount)
-    let linkPath = FlowManager.contractManagerPath
-    let contractManager = manager
-                        .getCapability(linkPath)
-                        .borrow<&FlowManager.Mapper>()!
-
-    return contractManager.accounts
-}
-`
-
-export const getFlowManagerContracts = async () => {
-  const args = [getManagerAddress()]
-  return await executeScript({
-    printAccountsScript,
-    args,
-    service: true,
-  })
 }

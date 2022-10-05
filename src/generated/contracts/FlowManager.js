@@ -11,7 +11,7 @@ export const CODE = `
 pub contract FlowManager {
 
     /// Account Manager
-    pub event AccountAdded(address: Address, name: String)
+    pub event AccountAdded(address: Address)
 
     pub struct Mapper {
         pub let accounts: {String: Address}
@@ -22,7 +22,7 @@ pub contract FlowManager {
 
         pub fun setAddress(_ name: String, address: Address){
             self.accounts[name] = address
-            emit FlowManager.AccountAdded(address: address, name: name)
+            emit FlowManager.AccountAdded(address: address)
         }
 
         init(){

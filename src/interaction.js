@@ -80,7 +80,6 @@ export const extractParameters = ixType => {
     if (ixService) {
       deployedContracts = defaultsByName
     } else {
-      //NOTE: At this point the default contracts are resolved, doesnt look like mine have yet.
       deployedContracts = await resolveImports(ixCode)
     }
 
