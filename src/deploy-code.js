@@ -174,8 +174,6 @@ export const deployContract = async props => {
 
   const signers = [containerAddress]
 
-  // `code` here is the deploy_contract tx that should add the contract to the FlowManager
-
   return sendTransaction({
     code,
     args: deployArgs,

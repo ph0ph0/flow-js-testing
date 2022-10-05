@@ -34,7 +34,7 @@ export {
   getTimestampOffset,
   setTimestampOffset,
 } from "./manager"
-export {getContractAddress, getFlowManagerContracts} from "./contract"
+export {getContractAddress} from "./contract"
 export {extractImports, replaceImportAddresses, resolveImports} from "./imports"
 export {
   promise,
