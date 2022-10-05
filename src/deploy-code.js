@@ -121,8 +121,6 @@ export const deployContract = async props => {
     transformers = [],
   } = props
 
-  console.log(`args at top of deployContract code: ${JSON.stringify(args)}`)
-
   const params = await extractContractParameters(rawContractCode)
   const ixName = name || params.contractName
 
@@ -175,13 +173,6 @@ export const deployContract = async props => {
   }
 
   const signers = [containerAddress]
-
-  console.log(
-    `!!!!!!CODE WHEN DEPLOYING CONTRACT!!!!!: ${JSON.stringify(code)}`
-  )
-  console.log(
-    `args passed into set contract address tx: ${JSON.stringify(deployArgs)}`
-  )
 
   // `code` here is the deploy_contract tx that should add the contract to the FlowManager
 
