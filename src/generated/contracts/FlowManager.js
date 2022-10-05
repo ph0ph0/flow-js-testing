@@ -5,13 +5,13 @@ import {
   replaceImportAddresses,
   reportMissingImports,
   deployContract,
-} from '@onflow/flow-cadut'
+} from "@onflow/flow-cadut"
 
 export const CODE = `
 pub contract FlowManager {
 
     /// Account Manager
-    pub event AccountAdded(address: Address)
+    pub event AccountAdded(address: Address, name: String)
 
     pub struct Mapper {
         pub let accounts: {String: Address}
@@ -22,7 +22,7 @@ pub contract FlowManager {
 
         pub fun setAddress(_ name: String, address: Address){
             self.accounts[name] = address
-            emit FlowManager.AccountAdded(address: address)
+            emit FlowManager.AccountAdded(address: address, name: name)
         }
 
         init(){
@@ -134,36 +134,35 @@ pub contract FlowManager {
     }
 }
  
-`;
+`
 
 /**
-* Method to generate cadence code for FlowManager contract
-* @param {Object.<string, string>} addressMap - contract name as a key and address where it's deployed as value
-*/
+ * Method to generate cadence code for FlowManager contract
+ * @param {Object.<string, string>} addressMap - contract name as a key and address where it's deployed as value
+ */
 export const FlowManagerTemplate = async (addressMap = {}) => {
-  const envMap = await getEnvironment();
+  const envMap = await getEnvironment()
   const fullMap = {
-  ...envMap,
-  ...addressMap,
-  };
+    ...envMap,
+    ...addressMap,
+  }
 
   // If there are any missing imports in fullMap it will be reported via console
   reportMissingImports(CODE, fullMap, `FlowManager =>`)
 
-  return replaceImportAddresses(CODE, fullMap);
-};
-
+  return replaceImportAddresses(CODE, fullMap)
+}
 
 /**
-* Deploys FlowManager transaction to the network
-* @param {Object.<string, string>} addressMap - contract name as a key and address where it's deployed as value
-* @param Array<*> args - list of arguments
-* param Array<string> - list of signers
-*/
-export const  deployFlowManager = async (props) => {
-  const { addressMap = {} } = props;
-  const code = await FlowManagerTemplate(addressMap);
+ * Deploys FlowManager transaction to the network
+ * @param {Object.<string, string>} addressMap - contract name as a key and address where it's deployed as value
+ * @param Array<*> args - list of arguments
+ * param Array<string> - list of signers
+ */
+export const deployFlowManager = async props => {
+  const {addressMap = {}} = props
+  const code = await FlowManagerTemplate(addressMap)
   const name = "FlowManager"
 
-  return deployContract({ code, name, processed: true, ...props })
+  return deployContract({code, name, processed: true, ...props})
 }

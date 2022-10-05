@@ -18,7 +18,7 @@
 
 import fs from "fs"
 import path from "path"
-import {config} from "@onflow/fcl"
+import {config, getAccount} from "@onflow/fcl"
 
 import {replaceImportAddresses} from "./imports"
 import {isObject} from "./utils"
@@ -88,11 +88,26 @@ export const getPath = async (name, type = TRANSACTION) => {
  * @param {boolean} [byAddress=false] - flag to indicate if address map is address to address type.
  * @returns {string}
  */
-export const getTemplate = (file, addressMap = {}, byAddress = false) => {
+export const getTemplate = async (file, addressMap = {}, byAddress = false) => {
   const rawCode = readFile(file)
 
   const defaults = byAddress ? defaultsByAddress : defaultsByName
 
+  // console.log(`file in getTemplate: ${file}`)
+  // console.log(`addressMap in getTemplate: ${JSON.stringify(addressMap)}`)
+  // //console.log(`raw code in getTemplate: ${JSON.stringify(rawCode)}`)
+  // console.log(`defaults in getTemplate: ${JSON.stringify(defaults)}`)
+
+  // let em = await getAccount("0xf8d6e0586b0a20c7")
+  // let em1 = await getAccount("0x01cf0e2f2f715450")
+  // let em2 = await getAccount("0x179b6b1cb6755e31")
+  // let ItemAdCopy = await getAccount("0xf3fcd2c1a78f5eee")
+  // console.log(`em: ${JSON.stringify(em)}`)
+  // console.log(`em1: ${JSON.stringify(em1)}`)
+  // console.log(`em2: ${JSON.stringify(em2)}`)
+  // console.log(`ItemAdCopy: ${JSON.stringify(ItemAdCopy)}`)
+
+  // addressMap = {ExampleSimpleTFNFT: "0xf8d6e0586b0a20c7"}
   return addressMap
     ? replaceImportAddresses(rawCode, {
         ...defaults,

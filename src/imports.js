@@ -26,13 +26,20 @@ import {replaceImportAddresses, extractImports} from "@onflow/flow-cadut"
  * @returns {{string:string}} - name/address map
  */
 export const resolveImports = async code => {
+  console.log(`code before resolveImports: ${JSON.stringify(code)}`)
   const addressMap = {}
   const importList = extractImports(code)
+  console.log(`importList in resolveImports: ${JSON.stringify(importList)}`)
   for (const key in importList) {
     if (defaultsByName[key]) {
       addressMap[key] = defaultsByName[key]
     } else {
       const address = await getContractAddress(key)
+      console.log(
+        `Contract address in resolveImports for key ${key}: ${JSON.stringify(
+          address
+        )}`
+      )
       addressMap[key] = address
     }
   }
