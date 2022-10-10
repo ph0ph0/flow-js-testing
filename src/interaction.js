@@ -28,7 +28,7 @@ import {isObject} from "./utils"
 
 const DEFAULT_LIMIT = 999
 
-export const extractParameters = ixType => {
+export const extractParams = async ixType => {
   return async params => {
     let ixCode, ixName, ixSigners, ixArgs, ixService, ixTransformers, ixLimit
 
@@ -127,7 +127,7 @@ export const sendTransaction = async (...props) => {
     err = null
   const logs = await captureLogs(async () => {
     try {
-      const extractor = extractParameters("tx")
+      const extractor = await extractParams("tx")
       const {code, args, signers, limit} = await extractor(_props)
 
       const serviceAuth = authorization()
@@ -176,8 +176,8 @@ export const executeScript = async (...props) => {
     err = null
   const logs = await captureLogs(async () => {
     try {
-      const extractor = extractParameters("script")
-      console.log(`About to run extractor with props: ${JSON.stringify(props)}`)
+      const extractor = await extractParams("script")
+      // console.log(`About to run extractor with props: ${JSON.stringify(props)}`)
       const {code, args, limit} = await extractor(props)
 
       const ix = [fcl.script(code), fcl.limit(limit)]
